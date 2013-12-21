@@ -2,29 +2,33 @@
 #include <string>
 
 template <class Key, class T>
-BST<Key, T>::BST() {
+BST<Key, T>::BST()
+{
     root = NULL;
 }
 
 template <class Key, class T>
-BST<Key, T>::~BST() {
+BST<Key, T>::~BST()
+{
     while (root != NULL)
     {
         root = remove(root->k, root);
 
-        //Avoid suffering from dangling pointers.
-        root = NULL;
     }
+    //Avoid suffering from dangling pointers.
+    root = NULL;
 }
 
 //Return the number of items currently in the SSet
 template <class Key, class T>
-unsigned long BST<Key, T>::size() {
+unsigned long BST<Key, T>::size()
+{
     return size(root);
 }
 
 template <class Key, class T>
-unsigned long BST<Key, T>::size(Node<Key, T>* r) {
+unsigned long BST<Key, T>::size(Node<Key, T>* r) 
+{
     if (r != NULL)
     {
     return 1 + size(r->left) + size(r->right);
@@ -169,18 +173,21 @@ Node<Key, T>* BST<Key, T>::prev(Key k, Node<Key, T>* r) {
 }
 
 template <class Key, class T>
-Node<Key, T>* BST<Key, T>::add(Key k, T x, Node<Key, T>* r) {
+Node<Key, T>* BST<Key, T>::add(Key k, T x, Node<Key, T>* r) 
+{
     if (r == NULL) 
-        {
+    {
         //Create new node.
         r = new Node<Key, T>();
         r->k = k;
         r->data = x;
         r->left = r->right = NULL;
-    } else if (k < r->k) 
+    } 
+    else if (k < r->k)
     {
         r->left = add(k, x, r->left);
-    } else if (k > r->k) 
+    } 
+    else if (k > r->k)
     {
         r->right = add(k, x, r->right);
     }
@@ -193,9 +200,17 @@ Node<Key, T>* BST<Key, T>::add(Key k, T x, Node<Key, T>* r) {
 }
 
 template <class Key, class T>
-Node<Key, T>* BST<Key, T>::remove(Key k, Node<Key, T>* r) {
+Node<Key, T>* BST<Key, T>::remove(Key k, Node<Key, T>* r)
+{
 
-    if (r == NULL) {/*do nothing*/}
+   //Make sure to update the root appropriately if you are deleting the only node in a tree.
+   
+
+    if (r == NULL) 
+    {/*do nothing*/}
+
+
+
     if (k < r->k)
     {
         r->left = remove(k, r->left);
@@ -218,10 +233,34 @@ Node<Key, T>* BST<Key, T>::remove(Key k, Node<Key, T>* r) {
         delete minNode;
         minNode = NULL;
     }
+    else if
+    {
+
+        if(r->left != NULL)
+        {
+           Node<Key,T> *tmp = r->left;
+           delete r;
+           r = NULL;
+           r = tmp;
+        }
+        
+        else
+        {
+           Node<Key,T> *tmp = r->right;
+           delete r;
+           r = NULL;
+           r = tmp;
+
+        }
+    }
     else
     {
-        r = (r->left != NULL) ? r->left : r->right;
+       delete r;
+       r = NULL;
     }
+    
+    
+
     return r;
 }
 
